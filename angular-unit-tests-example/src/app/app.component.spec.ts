@@ -2,13 +2,30 @@ import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { ExampleRestService } from './example-rest.service';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHandler } from '@angular/common/http';
+import { Car } from './car';
+
+export class ExampleRestServiceMock {
+  getCars(): Observable<Car[]> {
+    return of([{id: 1, brand: 'vw', cost: 50000}]);
+  }
+
+  getCarById(id: number): Observable<Car> {
+    return of({id: 1, brand: 'vw', cost: 50000})
+  }
+}
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [HttpClient, HttpHandler, ExampleRestService],
+      // providers: [HttpClient, HttpHandler, ExampleRestService],
+      providers: [
+        {
+          provide: ExampleRestService,
+          useClass: ExampleRestServiceMock
+        }
+      ],
       imports: [
         RouterTestingModule
       ],
@@ -40,17 +57,31 @@ describe('AppComponent', () => {
   // using spy for mock
   it(`loadCars should set loadedCars`, () => {
     // set up mock
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    const restService = TestBed.inject(ExampleRestService);
+    const car = {id: 1, brand: 'vw', cost: 50000};
+    spyOn(restService, 'getCars').and.returnValue(of([car]));
 
     // call loadCars method
+    app.loadCars();
 
     // assert loadedCars are set
+    expect(app.loadedCars.length).toBe(1);
+    expect(app.loadedCars[0]).toBe(car); 
   });
 
   // using mock class
   it(`loadCars should set loadedCars`, () => {
     // call loadCars method
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+
+    app.loadCars();
 
     // assert loadedCars are set
+    expect(app.loadedCars.length).toBe(1);
+    expect(app.loadedCars[0]).toEqual({id: 1, brand: 'vw', cost: 50000});
   });
 
   // use either mock class or spy object, or both :)

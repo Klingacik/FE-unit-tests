@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ExampleService } from './example.service';
 
-describe('ExampleServiceService', () => {
+describe('ExampleService', () => {
   let service: ExampleService;
 
   beforeEach(() => {
@@ -14,10 +14,13 @@ describe('ExampleServiceService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should sort array on init', () => {
+  it('should sort array by cost on init', () => {
     // call ngOnInit()
-
+    service.ngOnInit();
     // assert cars are ordered properly
+    expect(service.cars.length).toBe(4);
+    expect(service.cars[0].id).toBe(1);
+    expect(service.cars[3].id).toBe(3);
   });
 
   it('addNew should add new element to list', () => {

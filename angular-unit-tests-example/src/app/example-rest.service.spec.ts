@@ -19,11 +19,11 @@ describe('ExampleRestService', () => {
 
   it('getCars should call http get with correct url', () => {
     const httpClient = TestBed.inject(HttpClient);
-    const spy = spyOn(httpClient, 'get').and.callThrough();
+    const getSpy = spyOn(httpClient, 'get').and.callThrough();
 
     service.getCars();
 
-    expect(spy).toHaveBeenCalledWith('/cars' as any);
+    expect(getSpy).toHaveBeenCalledWith('/cars' as any);
   });
 
   it('getCarById should call http get with correct url', () => {
