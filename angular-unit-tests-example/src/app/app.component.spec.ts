@@ -19,7 +19,6 @@ export class ExampleRestServiceMock {
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      // providers: [HttpClient, HttpHandler, ExampleRestService],
       providers: [
         {
           provide: ExampleRestService,
